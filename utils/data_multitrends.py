@@ -34,7 +34,7 @@ class ZeroShotDataset():
         gtrends, image_features = [], []
         img_transforms = Compose([Resize((256, 256)), ToTensor(), Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
         for (idx, row) in tqdm(data.iterrows(), total=len(data), ascii=True):
-            cat, col, fab, fiq_attr, start_date, img_path = row['category'], row['color'], row['fabric'], row['extra'], \
+            cat, col, fab, start_date, img_path = row['category'], row['color'], row['fabric'], \
                 row['release_date'], row['image_path']
 
             # Get the gtrend signal up to the previous year (52 weeks) of the release date
