@@ -309,7 +309,7 @@ class GTM(pl.LightningModule):
         item_sales, category, color, fabric, temporal_features, gtrends, images = train_batch 
         forecasted_sales, _ = self.forward(category, color, fabric, temporal_features, gtrends, images)
         loss = F.mse_loss(item_sales, forecasted_sales.squeeze())
-        self.validation_step_outputs.append(loss)
+        self.val_step_outputs.append(loss)
         self.log('train_loss', loss)
 
         return loss
