@@ -64,15 +64,16 @@ class ZeroShotDataset():
         data.drop(['external_code', 'season', 'release_date', 'image_path'], axis=1, inplace=True)
 
         # Create tensors for each part of the input/output
-        print('sdaf', data.iloc[:, :12].values, data.iloc[:, 13:17].values)
-        item_sales, temporal_features = torch.FloatTensor(data.iloc[:, :12].values), torch.FloatTensor(
-            data.iloc[:, 13:17].values)
+        
         categories, colors, fabrics = [self.cat_dict[val] for val in data.iloc[:].category.values], \
                                        [self.col_dict[val] for val in data.iloc[:].color.values], \
                                        [self.fab_dict[val] for val in data.iloc[:].fabric.values]
         data['category'] = pd.Series(categories)
         data['color'] = pd.Series(colors)
         data['fabric'] = pd.Series(fabrics)
+        print('sdaf', data.iloc[:, :12].values, data.iloc[:, 13:17].values)
+        item_sales, temporal_features = torch.FloatTensor(data.iloc[:, :12].values), torch.FloatTensor(
+            data.iloc[:, 13:17].values)
         print('item sale, temporal_feature', item_sales, temporal_features)
         print('c, c, f', categories, colors, fabrics)
         categories, colors, fabrics = torch.LongTensor(categories), torch.LongTensor(colors), torch.LongTensor(fabrics)
