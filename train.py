@@ -118,7 +118,7 @@ if __name__ == '__main__':
     # Model specific arguments
     parser.add_argument('--model_type', type=str, default='GTM', help='Choose between GTM or FCN')
     parser.add_argument('--use_trends', type=int, default=1)
-    parser.add_argument('--use_img', type=int, default=1)
+    parser.add_argument('--use_img', type=int, default=0)
     parser.add_argument('--use_text', type=int, default=1)
     parser.add_argument('--trend_len', type=int, default=52)
     parser.add_argument('--num_trends', type=int, default=3)
