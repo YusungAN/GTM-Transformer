@@ -70,7 +70,9 @@ class ZeroShotDataset():
         categories, colors, fabrics = [self.cat_dict[val] for val in data.iloc[:].category.values], \
                                        [self.col_dict[val] for val in data.iloc[:].color.values], \
                                        [self.fab_dict[val] for val in data.iloc[:].fabric.values]
-
+        data['category'] = pd.Series(categories)
+        data['color'] = pd.Series(colors)
+        data['fabric'] = pd.Series(fabrics)
         print('item sale, temporal_feature', item_sales, temporal_features)
         print('c, c, f', categories, colors, fabrics)
         categories, colors, fabrics = torch.LongTensor(categories), torch.LongTensor(colors), torch.LongTensor(fabrics)
