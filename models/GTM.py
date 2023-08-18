@@ -70,12 +70,14 @@ class FusionNetwork(nn.Module):
 
     def forward(self, img_encoding, text_encoding, dummy_encoding):
         # Fuse static features together
-        pooled_img = self.img_pool(img_encoding)
-        condensed_img = self.img_linear(pooled_img.flatten(1))
+        # pooled_img = self.img_pool(img_encoding)
+        # condensed_img = self.img_linear(pooled_img.flatten(1))
 
         # Build input
         decoder_inputs = []
         if self.use_img == 1:
+            pooled_img = self.img_pool(img_encoding)
+            condensed_img = self.img_linear(pooled_img.flatten(1))
             decoder_inputs.append(condensed_img) 
         if self.use_text == 1:
             decoder_inputs.append(text_encoding) 
@@ -275,7 +277,7 @@ class GTM(pl.LightningModule):
         gtrend_encoding = self.gtrend_encoder(gtrends)
 
         # Fuse static features together
-        static_feature_fusion = self.static_feature_encoder(0, text_encoding, dummy_encoding)
+        static_feature_fusion = self.static_feature_encoder([0], text_encoding, dummy_encoding)
 
         if self.autoregressive == 1:
             # Decode
