@@ -94,7 +94,7 @@ def run(args):
 
     # If you wish to use Tensorboard you can change the logger to:
     # tb_logger = pl_loggers.TensorBoardLogger(args.log_dir+'/', name=model_savename)
-    trainer = pl.Trainer(gpus=[args.gpu_num], max_epochs=args.epochs, check_val_every_n_epoch=5,
+    trainer = pl.Trainer(accelerator="auto", max_epochs=args.epochs, check_val_every_n_epoch=5,
                          logger=wandb_logger, callbacks=[checkpoint_callback])
 
     # Fit model
