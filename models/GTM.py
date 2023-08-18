@@ -275,7 +275,7 @@ class GTM(pl.LightningModule):
         gtrend_encoding = self.gtrend_encoder(gtrends)
 
         # Fuse static features together
-        static_feature_fusion = self.static_feature_encoder(img_encoding, text_encoding, dummy_encoding)
+        static_feature_fusion = self.static_feature_encoder(0, text_encoding, dummy_encoding)
 
         if self.autoregressive == 1:
             # Decode
