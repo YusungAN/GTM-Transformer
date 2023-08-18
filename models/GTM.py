@@ -315,7 +315,7 @@ class GTM(pl.LightningModule):
         
         return item_sales.squeeze(), forecasted_sales.squeeze()
 
-    def validation_epoch_end(self, val_step_outputs):
+    def on_validation_epoch_end(self, val_step_outputs):
         item_sales, forecasted_sales = [x[0] for x in val_step_outputs], [x[1] for x in val_step_outputs]
         item_sales, forecasted_sales = torch.stack(item_sales), torch.stack(forecasted_sales)
         rescaled_item_sales, rescaled_forecasted_sales = item_sales*1065, forecasted_sales*1065 # 1065 is the normalization factor (max of the sales of the training set)
