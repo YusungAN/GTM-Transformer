@@ -33,9 +33,9 @@ def run(args):
     # Load Google trends
     gtrends = pd.read_csv(Path(args.data_folder + 'gtrends.csv'), index_col=[0], parse_dates=True)
 
-    train_loader = ZeroShotDataset(train_df[:1000], Path(args.data_folder + '/images'), gtrends[:20000], cat_dict, col_dict,
+    train_loader = ZeroShotDataset(train_df[:100], Path(args.data_folder + '/images'), gtrends[:20000], cat_dict, col_dict,
                                    fab_dict, args.trend_len).get_loader(batch_size=args.batch_size, train=True)
-    test_loader = ZeroShotDataset(test_df[:1000], Path(args.data_folder + '/images'), gtrends[:20000], cat_dict, col_dict,
+    test_loader = ZeroShotDataset(test_df[:100], Path(args.data_folder + '/images'), gtrends[:20000], cat_dict, col_dict,
                                   fab_dict, args.trend_len).get_loader(batch_size=1, train=False)
 
     # Create model
