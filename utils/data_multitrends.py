@@ -18,7 +18,7 @@ class ZeroShotDataset():
         self.col_dict = col_dict
         self.fab_dict = fab_dict
         self.trend_len = trend_len
-        self.img_root = img_root
+        # self.img_root = img_root
 
     def __len__(self):
         return len(self.data_df)
