@@ -245,7 +245,7 @@ class GTM(pl.LightningModule):
         self.gpu_num = gpu_num
         self.save_hyperparameters()
         
-        self.validation_step_outputs = []
+        self.val_step_outputs = []
 
          # Encoder
         self.dummy_encoder = DummyEmbedder(embedding_dim)
