@@ -47,7 +47,7 @@ class ZeroShotDataset():
             col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
             fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
             multitrends =  np.vstack([cat_gtrend, col_gtrend, fab_gtrend])
-            print('cat_trend: ', cat_trend)
+            print('cat_trend: ', cat_gtrend)
             print('multi_Treand', multitrends)
 
             # Read images
