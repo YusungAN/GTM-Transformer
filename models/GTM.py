@@ -267,9 +267,9 @@ class GTM(pl.LightningModule):
         mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0)).to('cuda:'+str(self.gpu_num))
         return mask
 
-    def forward(self, category, color, fabric, temporal_features, gtrends, images):
+    def forward(self, category, color, fabric, temporal_features, gtrends):
         # Encode features and get inputs
-        img_encoding = self.image_encoder(images)
+        # img_encoding = self.image_encoder(images)
         dummy_encoding = self.dummy_encoder(temporal_features)
         text_encoding = self.text_encoder(category, color, fabric)
         gtrend_encoding = self.gtrend_encoder(gtrends)
