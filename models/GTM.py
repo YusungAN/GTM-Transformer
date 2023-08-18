@@ -311,7 +311,7 @@ class GTM(pl.LightningModule):
 
     def validation_step(self, test_batch, batch_idx):
         item_sales, category, color, fabric, temporal_features, gtrends = test_batch 
-        forecasted_sales, _ = self.forward(category, color, fabric, temporal_features, gtrends, images)
+        forecasted_sales, _ = self.forward(category, color, fabric, temporal_features, gtrends)
         
         return item_sales.squeeze(), forecasted_sales.squeeze()
 
