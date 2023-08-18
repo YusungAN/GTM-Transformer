@@ -32,10 +32,10 @@ class ZeroShotDataset():
         # Get the Gtrends time series associated with each product
         # Read the images (extracted image features) as well
         gtrends, image_features = [], []
-        img_transforms = Compose([Resize((256, 256)), ToTensor(), Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
+        # img_transforms = Compose([Resize((256, 256)), ToTensor(), Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
         for (idx, row) in tqdm(data.iterrows(), total=len(data), ascii=True):
-            cat, col, fab, start_date, img_path = row['category'], row['color'], row['fabric'], \
-                row['release_date'], row['image_path']
+            cat, col, fab, start_date = row['category'], row['color'], row['fabric'], \
+                row['release_date']
 
             # Get the gtrend signal up to the previous year (52 weeks) of the release date
             gtrend_start = start_date - pd.DateOffset(weeks=52)
@@ -47,14 +47,15 @@ class ZeroShotDataset():
             col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
             fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
             multitrends =  np.vstack([cat_gtrend, col_gtrend, fab_gtrend])
-
+            print('cat_trend: ', cat_trend)
+            print('multi_Treand', multitrends)
 
             # Read images
-            img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
+            # img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
 
             # Append them to the lists
             gtrends.append(multitrends)
-            image_features.append(img_transforms(img))
+            # image_features.append(img_transforms(img))
 
         # Convert to numpy arrays
         gtrends = np.array(gtrends)
@@ -69,12 +70,13 @@ class ZeroShotDataset():
                                        [self.col_dict[val] for val in data.iloc[:].color.values], \
                                        [self.fab_dict[val] for val in data.iloc[:].fabric.values]
 
-        
+        print('item sale, temporal_feature', item_sales, temporal_features)
+        print('c, c, f', categories, colors, fabrics)
         categories, colors, fabrics = torch.LongTensor(categories), torch.LongTensor(colors), torch.LongTensor(fabrics)
         gtrends = torch.FloatTensor(gtrends)
-        images = torch.stack(image_features)
+        # images = torch.stack(image_features)
 
-        return TensorDataset(item_sales, categories, colors, fabrics, temporal_features, gtrends, images)
+        return TensorDataset(item_sales, categories, colors, fabrics, temporal_features, gtrends)
 
     def get_loader(self, batch_size, train=True):
         print('Starting dataset creation process...')
