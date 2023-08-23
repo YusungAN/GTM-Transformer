@@ -114,7 +114,7 @@ def run(args):
     print_error_metrics(gt, forecasts, rescaled_gt, rescaled_forecasts)
 
     
-    torch.save({'results': forecasts* rescale_vals, 'gts': gt* rescale_vals, 'codes': item_codes.tolist()}, Path('results/' + model_savename+'.pth'))
+    torch.save({'results': forecasts* rescale_vals, 'gts': gt* rescale_vals, 'codes': item_codes.tolist()}, Path('GTM-Transformer/results/' + model_savename+'.pth'))
 
 
 if __name__ == '__main__':
