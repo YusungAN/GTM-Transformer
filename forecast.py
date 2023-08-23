@@ -99,7 +99,7 @@ def run(args):
         with torch.no_grad():
             test_data = [tensor.to(device) for tensor in test_data]
             item_sales, category, color, textures, temporal_features, gtrends, images =  test_data
-            y_pred, att = model(category, color,textures, temporal_features, gtrends, images)
+            y_pred, att = model(category, color,textures, temporal_features, gtrends)
             forecasts.append(y_pred.detach().cpu().numpy().flatten()[:args.output_dim])
             gt.append(item_sales.detach().cpu().numpy().flatten()[:args.output_dim])
             attns.append(att.detach().cpu().numpy())
