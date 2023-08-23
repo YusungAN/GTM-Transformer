@@ -46,7 +46,7 @@ def run(args):
     # Load Google trends
     gtrends = pd.read_csv(Path(args.data_folder + 'gtrends.csv'), index_col=[0], parse_dates=True)
     
-    test_loader = ZeroShotDataset(test_df[:100], Path(args.data_folder + '/images'), gtrends[:100], cat_dict, col_dict, \
+    test_loader = ZeroShotDataset(test_df[:100], Path(args.data_folder + '/images'), gtrends, cat_dict, col_dict, \
             fab_dict, args.trend_len).get_loader(batch_size=1, train=False)
 
 
