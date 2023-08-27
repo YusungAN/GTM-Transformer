@@ -312,7 +312,9 @@ class GTM(pl.LightningModule):
 
     def training_step(self, train_batch, batch_idx):
         item_sales, text, gtrends = train_batch
+        print('fucking training', item_sales, text, gtrends)
         forecasted_sales, _ = self.forward(text, gtrends)
+        rint('fucking training', forecasted_sales)
         loss = F.mse_loss(item_sales, forecasted_sales.squeeze())
         self.log('train_loss', loss)
 
