@@ -20,23 +20,21 @@ def run(args):
     pl.seed_everything(args.seed)
 
     # Load sales data
-    train_df = pd.read_csv(Path(args.data_folder + 'train.csv'), parse_dates=['release_date'])
-    test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
+    train_df = pd.read_csv(Path(args.data_folder + 'naver_searches_train2.csv'))
+    # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
     # Load category and color encodings
-    cat_dict = torch.load(Path(args.data_folder + 'category_labels.pt'))
-    col_dict = torch.load(Path(args.data_folder + 'color_labels.pt'))
-    fab_dict = torch.load(Path(args.data_folder + 'fabric_labels.pt'))
-    print(cat_dict)
-    print(col_dict)
-    print(fab_dict)
+    # cat_dict = torch.load(Path(args.data_folder + 'category_labels.pt'))
+    # col_dict = torch.load(Path(args.data_folder + 'color_labels.pt'))
+    # fab_dict = torch.load(Path(args.data_folder + 'fabric_labels.pt'))
+    # print(cat_dict)
+    # print(col_dict)
+    # print(fab_dict)
     # Load Google trends
-    gtrends = pd.read_csv(Path(args.data_folder + 'gtrends.csv'), index_col=[0], parse_dates=True)
+    gtrends = pd.read_csv(Path(args.data_folder + 'naver_searches_input.csv'), index_col=[0], parse_dates=True)
 
-    train_loader = ZeroShotDataset(train_df[:100], Path(args.data_folder + '/images'), gtrends[:20000], cat_dict, col_dict,
-                                   fab_dict, args.trend_len).get_loader(batch_size=args.batch_size, train=True)
-    test_loader = ZeroShotDataset(test_df[:100], Path(args.data_folder + '/images'), gtrends[:20000], cat_dict, col_dict,
-                                  fab_dict, args.trend_len).get_loader(batch_size=1, train=False)
+    train_loader = ZeroShotDataset(train_df, Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=args.batch_size, train=True)
+    # test_loader = ZeroShotDataset(test_df, Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=1, train=False)
 
     # Create model
     if args.model_type == 'FCN':
@@ -44,9 +42,6 @@ def run(args):
             embedding_dim=args.embedding_dim,
             hidden_dim=args.hidden_dim,
             output_dim=args.output_dim,
-            cat_dict=cat_dict,
-            col_dict=col_dict,
-            fab_dict=fab_dict,
             use_trends=args.use_trends,
             use_text=args.use_text,
             use_img=args.use_img,
@@ -62,9 +57,6 @@ def run(args):
             output_dim=args.output_dim,
             num_heads=args.num_attn_heads,
             num_layers=args.num_hidden_layers,
-            cat_dict=cat_dict,
-            col_dict=col_dict,
-            fab_dict=fab_dict,
             use_text=args.use_text,
             use_img=args.use_img,
             trend_len=args.trend_len,
@@ -120,8 +112,8 @@ if __name__ == '__main__':
     parser.add_argument('--use_trends', type=int, default=1)
     parser.add_argument('--use_img', type=int, default=0)
     parser.add_argument('--use_text', type=int, default=1)
-    parser.add_argument('--trend_len', type=int, default=52)
-    parser.add_argument('--num_trends', type=int, default=3)
+    parser.add_argument('--trend_len', type=int, default=36)
+    parser.add_argument('--num_trends', type=int, default=2)
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--embedding_dim', type=int, default=32)
     parser.add_argument('--hidden_dim', type=int, default=64)
