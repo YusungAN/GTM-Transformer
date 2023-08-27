@@ -148,9 +148,9 @@ class TextEmbedder(nn.Module):
 
         # BERT gives us embeddings for [CLS] ..  [EOS], which is why we only average the embeddings in the range [1:-1]
         # We're not fine tuning BERT and we don't want the noise coming from [CLS] or [EOS]
-        model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
-        word_embeddings = model.encode([text])
-        word_embeddings = torch.stack(word_embeddings).to('cuda:' + str(self.gpu_num))
+        # model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
+        # word_embeddings = model.encode([text])
+        word_embeddings = torch.stack(text).to('cuda:' + str(self.gpu_num))
 
         # Embed to our embedding space
         word_embeddings = self.dropout(self.fc(word_embeddings))
