@@ -34,7 +34,7 @@ def run(args):
     gtrends = pd.read_csv(Path(args.data_folder + 'naver_searches_input.csv'), index_col=[0], parse_dates=True)
 
     train_loader = ZeroShotDataset(train_df, Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=args.batch_size, train=True)
-    # test_loader = ZeroShotDataset(test_df, Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=1, train=False)
+    test_loader = ZeroShotDataset(train_df, Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=args.batch_size, train=True)
 
     # Create model
     if args.model_type == 'FCN':
@@ -90,8 +90,7 @@ def run(args):
                          logger=wandb_logger, callbacks=[checkpoint_callback])
 
     # Fit model
-    trainer.fit(model, train_dataloaders=train_loader)
-                # val_dataloaders=test_loader)
+    trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=test_loader)
 
     # Print out path of best model
     print(checkpoint_callback.best_model_path)
