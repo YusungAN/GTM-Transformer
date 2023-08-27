@@ -8,6 +8,8 @@ from torch.utils.data import DataLoader, TensorDataset
 from torchvision.transforms import Resize, ToTensor, Normalize, Compose
 from sklearn.preprocessing import MinMaxScaler
 from sentence_transformers import SentenceTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
