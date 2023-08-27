@@ -9,6 +9,7 @@ from models.FCN import FCN
 from utils.data_multitrends import ZeroShotDataset
 from pathlib import Path
 from sklearn.metrics import mean_absolute_error
+from sentence_transformers import SentenceTransformer
 from pathlib import Path
 
 
@@ -98,7 +99,8 @@ def run(args):
     #         gt.append(item_sales.detach().cpu().numpy().flatten()[:args.output_dim])
     #         attns.append(att.detach().cpu().numpy())
     gtrends = [4.25469,4.41083,4.11319,3.20078,3.20078,3.33739,3.86435,3.73261,3.06416,3.5716,3.87899,3.48865,3.9717,3.66918,4.68894,4.43034,3.98633,3.62039,4.20102,3.64479,3.44962,2.7714,2.99585,3.77653,3.53744,3.33739,3.23005,3.1471,3.25933,3.07879,4.06928,37.72627,100,67.7775,41.59063,35.24762]
-    y_pred, att = model('다이어트 샐러드 건강 소스', gtrends)
+    sbert = SentenceTransformer('beomi/KcELECTRA-base-v2022')
+    y_pred, att = model(sbert.encode(['다이어트 샐러드 건강 소스']}, gtrends)
     attns = np.stack(attns)
     forecasts = np.array(forecasts)
     gt = np.array(gt)
