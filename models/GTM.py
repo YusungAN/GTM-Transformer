@@ -150,7 +150,7 @@ class TextEmbedder(nn.Module):
         # We're not fine tuning BERT and we don't want the noise coming from [CLS] or [EOS]
         # model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
         # word_embeddings = model.encode([text])
-        word_embeddings = torch.stack(text).to('cuda:' + str(self.gpu_num))
+        word_embeddings = torch.Tensor(text).to('cuda:' + str(self.gpu_num))
 
         # Embed to our embedding space
         word_embeddings = self.dropout(self.fc(word_embeddings))
