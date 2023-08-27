@@ -90,7 +90,7 @@ def run(args):
                          logger=wandb_logger, callbacks=[checkpoint_callback])
 
     # Fit model
-    trainer.fit(model, train_dataloaders=train_loader)#, val_dataloaders=test_loader)
+    trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=test_loader)
 
     # Print out path of best model
     print(checkpoint_callback.best_model_path)
