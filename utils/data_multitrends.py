@@ -46,7 +46,7 @@ class ZeroShotDataset():
             # col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
             # fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
             cat_gtrend = self.gtrends.loc['닭가슴살'][1:].values
-            brand_gtrend = self.gtrends.loc[brand][1:].values
+            brand_gtrend = self.gtrends.loc[brand[:-4]][1:].values
 
             cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()
             brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
