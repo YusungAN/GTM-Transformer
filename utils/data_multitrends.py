@@ -84,7 +84,20 @@ class ZeroShotDataset():
         item_sales = torch.FloatTensor(data.iloc[1:13].values)
         gtrends = torch.FloatTensor(gtrends)
         model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
-        words = data['topic_model_words'].values
+        class_doc = data['topic_model_words'].values
+        print(class_doc)
+        df2 = pd.DataFrame(class_doc, columns=['text'])
+        
+        tfidf_vector = TfidfVectorizer()
+        tfidf_matrix = tfidf_vector.fit_transform(df2['text']).toarray()
+        tfidf_feature = tfidf_vector.get_feature_names_out()
+        result = pd.DataFrame(tfidf_matrix, columns=tfidf_feature)
+        res = 0
+        words = []
+        for k in range(len(data['keyword'].values)):
+            tmp = result.iloc[k]
+            tmp.sort_values(ascending=False, inplace=True)
+            words.append(' '.join(list(tmp[:5].index)))
         word_embeddings = model.encode(words)
         text = torch.FloatTensor(word_embeddings)
         # images = torch.stack(image_features)
