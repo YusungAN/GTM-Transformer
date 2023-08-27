@@ -90,8 +90,8 @@ def run(args):
                          logger=wandb_logger, callbacks=[checkpoint_callback])
 
     # Fit model
-    trainer.fit(model, train_dataloaders=train_loader,
-                val_dataloaders=test_loader)
+    trainer.fit(model, train_dataloaders=train_loader)
+                # val_dataloaders=test_loader)
 
     # Print out path of best model
     print(checkpoint_callback.best_model_path)
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     parser.add_argument('--data_folder', type=str, default='dataset/')
     parser.add_argument('--log_dir', type=str, default='log')
     parser.add_argument('--seed', type=int, default=21)
-    parser.add_argument('--epochs', type=int, default=200)
+    parser.add_argument('--epochs', type=int, default=20)
     parser.add_argument('--gpu_num', type=int, default=0)
 
     # Model specific arguments
