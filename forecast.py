@@ -47,6 +47,7 @@ def run(args):
     # Load Google trends
     # gtrends = pd.read_csv(Path(args.data_folder + 'gtrends.csv'), index_col=[0], parse_dates=True)
     test_df = pd.read_csv('naver_searches_train2.csv')
+    gtrends = pd.read_csv('naver_searches_input.csv', index_col=[0], parse_dates=True)
     test_loader = ZeroShotDataset(test_df[test_df['keyword'] == '랭킹닭컴닭가슴살'], Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=1, train=False)
 
 
@@ -89,14 +90,15 @@ def run(args):
     model.to(device)
     model.eval()
     gt, forecasts, attns = [], [],[]
-    # for test_data in tqdm(test_loader, total=len(test_loader), ascii=True):
-    #     with torch.no_grad():
-    #         test_data = [tensor.to(device) for tensor in test_data]
-    #         item_sales, category, color, textures, temporal_features, gtrends =  test_data
-    #         y_pred, att = model(category, color,textures, temporal_features, gtrends)
-    #         forecasts.append(y_pred.detach().cpu().numpy().flatten()[:args.output_dim])
-    #         gt.append(item_sales.detach().cpu().numpy().flatten()[:args.output_dim])
-    #         attns.append(att.detach().cpu().numpy())
+    for test_data in tqdm(test_loader, total=len(test_loader), ascii=True):
+        with torch.no_grad():
+            test_data = [tensor.to(device) for tensor in test_data]
+            item_sales, text, gtrends =  test_data
+            y_pred, att = model(text, gtrends)
+            print(y_pred)
+            forecasts.append(y_pred.detach().cpu().numpy().flatten()[:args.output_dim])
+            gt.append(item_sales.detach().cpu().numpy().flatten()[:args.output_dim])
+            attns.append(att.detach().cpu().numpy())
     gtrends = [[4.25469,4.41083,4.11319,3.20078,3.20078,3.33739,3.86435,3.73261,3.06416,3.5716,3.87899,3.48865,3.9717,3.66918,4.68894,4.43034,3.98633,3.62039,4.20102,3.64479,3.44962,2.7714,2.99585,3.77653,3.53744,3.33739,3.23005,3.1471,3.25933,3.07879,4.06928,37.72627,100,67.7775,41.59063,35.24762]]
     sbert = SentenceTransformer('beomi/KcELECTRA-base-v2022')
     y_pred, att = model(sbert.encode(['다이어트 샐러드 건강 소스']), torch.Tensor(gtrends))
