@@ -48,7 +48,7 @@ def run(args):
     # gtrends = pd.read_csv(Path(args.data_folder + 'gtrends.csv'), index_col=[0], parse_dates=True)
     test_df = pd.read_csv('naver_searches_train2.csv')
     gtrends = pd.read_csv('naver_searches_input.csv', index_col=[0], parse_dates=True)
-    test_loader = ZeroShotDataset(test_df[test_df['keyword'] == '1am닭가슴살'], Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=1, train=False)
+    test_loader = ZeroShotDataset(test_df[test_df['keyword'] == '굽네닭가슴살'], Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=1, train=False)
 
 
     model_savename = f'{args.wandb_run}_{args.output_dim}'
