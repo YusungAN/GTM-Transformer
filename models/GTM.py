@@ -332,5 +332,5 @@ class GTM(pl.LightningModule):
         mae = F.l1_loss(rescaled_item_sales, rescaled_forecasted_sales)
         self.log('val_mae', mae)
         self.log('val_loss', loss)
-
+        print(item_sales, forecasted_sales)
         print('Validation MAE:', mae.detach().cpu().numpy(), 'LR:', self.optimizers().param_groups[0]['lr'])
