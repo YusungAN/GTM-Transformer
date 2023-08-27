@@ -7,16 +7,15 @@ from PIL import Image, ImageFile
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision.transforms import Resize, ToTensor, Normalize, Compose
 from sklearn.preprocessing import MinMaxScaler
+from sentence_transformers import SentenceTransformer
+
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 class ZeroShotDataset():
-    def __init__(self, data_df, img_root, gtrends, cat_dict, col_dict, fab_dict, trend_len):
+    def __init__(self, data_df, img_root, gtrends, trend_len):
         self.data_df = data_df
         self.gtrends = gtrends
-        self.cat_dict = cat_dict
-        self.col_dict = col_dict
-        self.fab_dict = fab_dict
         self.trend_len = trend_len
         # self.img_root = img_root
 
@@ -34,19 +33,24 @@ class ZeroShotDataset():
         gtrends, image_features = [], []
         # img_transforms = Compose([Resize((256, 256)), ToTensor(), Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
         for (idx, row) in tqdm(data.iterrows(), total=len(data), ascii=True):
-            cat, col, fab, start_date = row['category'], row['color'], row['fabric'], \
-                row['release_date']
-
+            # cat, col, fab, start_date = row['category'], row['color'], row['fabric'], \
+            #     row['release_date']
+            brand = row['keyword']
             # Get the gtrend signal up to the previous year (52 weeks) of the release date
-            gtrend_start = start_date - pd.DateOffset(weeks=52)
-            cat_gtrend = self.gtrends.loc[gtrend_start:start_date][cat][-52:].values[:self.trend_len]
-            col_gtrend = self.gtrends.loc[gtrend_start:start_date][col][-52:].values[:self.trend_len]
-            fab_gtrend = self.gtrends.loc[gtrend_start:start_date][fab][-52:].values[:self.trend_len]
+            # gtrend_start = start_date - pd.DateOffset(weeks=52)
+            # cat_gtrend = self.gtrends.loc[gtrend_start:start_date][cat][-52:].values[:self.trend_len]
+            # col_gtrend = self.gtrends.loc[gtrend_start:start_date][col][-52:].values[:self.trend_len]
+            # fab_gtrend = self.gtrends.loc[gtrend_start:start_date][fab][-52:].values[:self.trend_len]
 
-            cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1,1)).flatten()
-            col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
-            fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
-            multitrends =  np.vstack([cat_gtrend, col_gtrend, fab_gtrend])
+            # cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1,1)).flatten()
+            # col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
+            # fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
+            cat_gtrend = self.gtrends.loc['닭가슴살'][1:].values
+            brand_gtrend = self.gtrends.loc[brand][1:].values
+
+            cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()
+            brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
+            multitrends = np.vstack([cat_gtrend, brand_gtrend])
             print('cat_trend: ', cat_gtrend)
             print('multi_Treand', multitrends)
 
@@ -61,26 +65,31 @@ class ZeroShotDataset():
         gtrends = np.array(gtrends)
 
         # Remove non-numerical information
-        data.drop(['external_code', 'season', 'release_date', 'image_path'], axis=1, inplace=True)
+        # data.drop(['external_code', 'season', 'release_date', 'image_path'], axis=1, inplace=True)
 
         # Create tensors for each part of the input/output
-        
-        categories, colors, fabrics = [self.cat_dict[val] for val in data.iloc[:].category.values], \
-                                       [self.col_dict[val] for val in data.iloc[:].color.values], \
-                                       [self.fab_dict[val] for val in data.iloc[:].fabric.values]
-        data['category'] = pd.Series(categories)
-        data['color'] = pd.Series(colors)
-        data['fabric'] = pd.Series(fabrics)
-        print('sdaf', data.iloc[:, :12].values, data.iloc[:, 13:17].values)
-        item_sales, temporal_features = torch.FloatTensor(data.iloc[:, :12].values), torch.FloatTensor(
-            data.iloc[:, 13:17].values)
-        print('item sale, temporal_feature', item_sales, temporal_features)
-        print('c, c, f', categories, colors, fabrics)
-        categories, colors, fabrics = torch.LongTensor(categories), torch.LongTensor(colors), torch.LongTensor(fabrics)
+
+        # categories, colors, fabrics = [self.cat_dict[val] for val in data.iloc[:].category.values], \
+        #                               [self.col_dict[val] for val in data.iloc[:].color.values], \
+        #                               [self.fab_dict[val] for val in data.iloc[:].fabric.values]
+        # data['category'] = pd.Series(categories)
+        # data['color'] = pd.Series(colors)
+        # data['fabric'] = pd.Series(fabrics)
+        # print('sdaf', data.iloc[:, :12].values, data.iloc[:, 13:17].values)
+        # item_sales, temporal_features = torch.FloatTensor(data.iloc[:, :12].values), torch.FloatTensor(
+        #     data.iloc[:, 13:17].values)
+        # print('item sale, temporal_feature', item_sales, temporal_features)
+        # print('c, c, f', categories, colors, fabrics)
+        # categories, colors, fabrics = torch.LongTensor(categories), torch.LongTensor(colors), torch.LongTensor(fabrics)
+        item_sales = torch.FloatTensor(data.iloc[1:13].values)
         gtrends = torch.FloatTensor(gtrends)
+        model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
+        words = data['topic_model_words'].values
+        word_embeddings = model.encode(words)
+        text = torch.FloatTensor(word_embeddings)
         # images = torch.stack(image_features)
 
-        return TensorDataset(item_sales, categories, colors, fabrics, temporal_features, gtrends)
+        return TensorDataset(item_sales, text, gtrends)
 
     def get_loader(self, batch_size, train=True):
         print('Starting dataset creation process...')
