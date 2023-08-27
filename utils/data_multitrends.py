@@ -81,7 +81,7 @@ class ZeroShotDataset():
         # print('item sale, temporal_feature', item_sales, temporal_features)
         # print('c, c, f', categories, colors, fabrics)
         # categories, colors, fabrics = torch.LongTensor(categories), torch.LongTensor(colors), torch.LongTensor(fabrics)
-        item_sales = torch.FloatTensor(data.iloc[1:13].values)
+        item_sales = torch.FloatTensor(data.iloc[:, 1:13].values)
         gtrends = torch.FloatTensor(gtrends)
         model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
         class_doc = data['topic_model_words'].values
