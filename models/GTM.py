@@ -61,7 +61,7 @@ class FusionNetwork(nn.Module):
         self.img_linear = nn.Linear(2048, embedding_dim)
         self.use_img = use_img
         self.use_text = use_text
-        input_dim = embedding_dim + (embedding_dim * use_img) + (embedding_dim * use_text)
+        input_dim = embedding_dim #+ (embedding_dim * use_img) + (embedding_dim * use_text)
         self.feature_fusion = nn.Sequential(
             nn.BatchNorm1d(input_dim),
             nn.Linear(input_dim, input_dim, bias=False),
