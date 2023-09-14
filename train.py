@@ -20,12 +20,12 @@ def run(args):
     pl.seed_everything(args.seed)
 
     # Load sales data
-    train_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv'))
-    gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
+    train_df = pd.read_csv('itemscout_item_word.csv')
     chosen_cat = ['식품']#['패션의류', '패션잡화', '화장품/미용', '가구/인테리어', '식품', '생활/건강']
-    train_df[train_df.cat1.isin(chosen_cat)]
+    train_df = train_df[train_df.cat1.isin(chosen_cat)]
+    gtrends = pd.read_csv('item_word_trend.csv')
     train_df = train_df[train_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())]
-    reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
+    reviews_df = pd.read_csv( 'gtm_product_name.csv')
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
     # Load category and color encodings
