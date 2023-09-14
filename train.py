@@ -36,6 +36,7 @@ def run(args):
     # Load Google trends
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
     train_df = train_df[train_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())]
+    print(gtrends.groupby('keyword').count().index.tolist()[:10])
     train_df.info()
     print(train_df.head(5))
     train_loader = ZeroShotDataset(train_df[:20000], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
