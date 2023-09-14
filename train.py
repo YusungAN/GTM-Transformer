@@ -34,7 +34,7 @@ def run(args):
     # print(col_dict)
     # print(fab_dict)
     # Load Google trends
-    gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'), index_col=[0], parse_dates=True)
+    gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
     train_df = train_df[train_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())]
     train_df.info()
     print(train_df.head(5))
