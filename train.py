@@ -34,8 +34,8 @@ def run(args):
     # Load Google trends
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'), index_col=[0], parse_dates=True)
 
-    train_loader = ZeroShotDataset(train_df, Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
-    test_loader = ZeroShotDataset(train_df, Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    train_loader = ZeroShotDataset(train_df[:20000], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    test_loader = ZeroShotDataset(train_df[20000:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
 
     # Create model
     if args.model_type == 'FCN':
