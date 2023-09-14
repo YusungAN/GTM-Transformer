@@ -19,6 +19,7 @@ class ZeroShotDataset():
         self.data_df = data_df
         self.gtrends = gtrends
         self.trend_len = trend_len
+        self.reviews = reviews
         # self.img_root = img_root
 
     def __len__(self):
@@ -29,7 +30,7 @@ class ZeroShotDataset():
 
     def preprocess_data(self):
         data = self.data_df
-
+        reviews = self.reviews
         # Get the Gtrends time series associated with each product
         # Read the images (extracted image features) as well
         gtrends, image_features = [], []
