@@ -21,7 +21,8 @@ def run(args):
 
     # Load sales data
     train_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv'))
-    train_df = train_df[train_df['cat1'] == '식품']
+    chosen_cat = ['식품']#['패션의류', '패션잡화', '화장품/미용', '가구/인테리어', '식품', '생활/건강']
+    train_df = train_df[train_df.cat1.isin(chosen_cat)]
     reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
