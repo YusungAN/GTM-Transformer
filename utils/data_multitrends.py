@@ -58,9 +58,6 @@ class ZeroShotDataset():
             print(cat_gtrend.shape, brand_gtrend.shape)
             print('----')
             multitrends = np.vstack([cat_gtrend, brand_gtrend])
-            print(brand, 'cat_trend: ', cat_gtrend)
-            print(brand, 'multi_Treand', multitrends)
-
             # Read images
             # img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
 
