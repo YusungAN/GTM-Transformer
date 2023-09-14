@@ -52,7 +52,7 @@ class ZeroShotDataset():
             print('----')
             print('item_cat', item_cat)
             print('----')
-            cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat].values[0][1:1+self.trend_len]
+            cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat.replace('/', '')].values[0][1:1+self.trend_len]
             brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
             cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
             brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
@@ -99,6 +99,7 @@ class ZeroShotDataset():
         words = []
         for k in range(len(data['keyword'].values)):
             class_doc = reviews[reviews['keyword'] == k]
+            print(k)
             if len(class_doc.index) != 0:
                 df2 = pd.DataFrame(class_doc.values, columns=['text'])
             
