@@ -87,7 +87,7 @@ class ZeroShotDataset():
         # categories, colors, fabrics = torch.LongTensor(categories), torch.LongTensor(colors), torch.LongTensor(fabrics)
 
         item_sale_li = []
-        data.apply(lambda x: item_sale_li.append(data.loc[data['keyword'] == x, '20220103':'20221226'].values, axis=1)
+        data.apply(lambda x: item_sale_li.append(data.loc[:, '20220103':'20221226'].values, axis=1)
         item_sales = torch.FloatTensor(item_sale_li)
         gtrends = torch.FloatTensor(gtrends)
         model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
