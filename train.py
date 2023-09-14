@@ -21,6 +21,7 @@ def run(args):
 
     # Load sales data
     train_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv'))
+    train_df = train_df[train_df['cat1'] == '식품']
     reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
