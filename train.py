@@ -20,7 +20,8 @@ def run(args):
     pl.seed_everything(args.seed)
 
     # Load sales data
-    train_df = pd.read_csv(Path(args.data_folder + 'naver_searches_train2.csv'))
+    train_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv'))
+    reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
     # Load category and color encodings
@@ -31,7 +32,7 @@ def run(args):
     # print(col_dict)
     # print(fab_dict)
     # Load Google trends
-    gtrends = pd.read_csv(Path(args.data_folder + 'naver_searches_input.csv'), index_col=[0], parse_dates=True)
+    gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'), index_col=[0], parse_dates=True)
 
     train_loader = ZeroShotDataset(train_df, Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=args.batch_size, train=True)
     test_loader = ZeroShotDataset(train_df, Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=args.batch_size, train=True)
