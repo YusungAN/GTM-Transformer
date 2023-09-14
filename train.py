@@ -22,7 +22,7 @@ def run(args):
     # Load sales data
     train_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv'))
     chosen_cat = ['식품']#['패션의류', '패션잡화', '화장품/미용', '가구/인테리어', '식품', '생활/건강']
-    train_df[train_df.keyword.isin(chosen_cat)]
+    train_df[train_df.cat1.isin(chosen_cat)]
     reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
@@ -36,6 +36,8 @@ def run(args):
     # Load Google trends
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'), index_col=[0], parse_dates=True)
     train_df = train_df[train_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())]
+    train_df.info()
+    print(train_df.head(5))
     train_loader = ZeroShotDataset(train_df[:20000], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
     test_loader = ZeroShotDataset(train_df[20000:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
 
