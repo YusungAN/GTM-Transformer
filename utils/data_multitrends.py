@@ -15,7 +15,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 class ZeroShotDataset():
-    def __init__(self, data_df, img_root, gtrends, trend_len):
+    def __init__(self, data_df, img_root, gtrends, trend_len, reviews):
         self.data_df = data_df
         self.gtrends = gtrends
         self.trend_len = trend_len
@@ -37,7 +37,7 @@ class ZeroShotDataset():
         for (idx, row) in tqdm(data.iterrows(), total=len(data), ascii=True):
             # cat, col, fab, start_date = row['category'], row['color'], row['fabric'], \
             #     row['release_date']
-            brand = row['keyword']
+            keyword = row['keyword']
             # Get the gtrend signal up to the previous year (52 weeks) of the release date
             # gtrend_start = start_date - pd.DateOffset(weeks=52)
             # cat_gtrend = self.gtrends.loc[gtrend_start:start_date][cat][-52:].values[:self.trend_len]
@@ -47,8 +47,10 @@ class ZeroShotDataset():
             # cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1,1)).flatten()
             # col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
             # fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
-            cat_gtrend = self.gtrends.loc['닭가슴살'][1:].values
-            brand_gtrend = self.gtrends.loc[brand[:-4]][1:].values
+            item_cat = data[data['keyword'] == keyword]['cat2']
+            print('item_cat', item_cat)
+            cat_gtrend = self.gtrends.loc[item_cat][1:1+self.trend_len].values
+            brand_gtrend = self.gtrends.loc[keyword][1:1+self.trend_len].values
 
             cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()
             brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
@@ -83,23 +85,26 @@ class ZeroShotDataset():
         # print('item sale, temporal_feature', item_sales, temporal_features)
         # print('c, c, f', categories, colors, fabrics)
         # categories, colors, fabrics = torch.LongTensor(categories), torch.LongTensor(colors), torch.LongTensor(fabrics)
-        item_sales = torch.FloatTensor(data.iloc[:, 1:13].values)
+
+        item_sale_li = []
+        data.apply(lambda x: item_sale_li.append(data.loc[data['keyword'] == x, '20220103':'20221226'].values, axis=1)
+        item_sales = torch.FloatTensor(item_sale_li)
         gtrends = torch.FloatTensor(gtrends)
         model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
-        class_doc = data['topic_model_words'].values
-        print(class_doc)
-        df2 = pd.DataFrame(class_doc, columns=['text'])
         
-        tfidf_vector = TfidfVectorizer()
-        tfidf_matrix = tfidf_vector.fit_transform(df2['text']).toarray()
-        tfidf_feature = tfidf_vector.get_feature_names_out()
-        result = pd.DataFrame(tfidf_matrix, columns=tfidf_feature)
         res = 0
         words = []
         for k in range(len(data['keyword'].values)):
+            class_doc = reviews[reviews['keyword'] == k].values
+            df2 = pd.DataFrame(class_doc, columns=['text'])
+        
+            tfidf_vector = TfidfVectorizer()
+            tfidf_matrix = tfidf_vector.fit_transform(df2['text']).toarray()
+            tfidf_feature = tfidf_vector.get_feature_names_out()
+            result = pd.DataFrame(tfidf_matrix, columns=tfidf_feature)
             tmp = result.iloc[k]
             tmp.sort_values(ascending=False, inplace=True)
-            words.append(' '.join(list(tmp[:5].index)))
+            words.append(' '.join(list(tmp[:5].index)+[k, data[data['keyword'] == k]['cat2']]))
         word_embeddings = model.encode(words)
         text = torch.FloatTensor(word_embeddings)
         # images = torch.stack(image_features)
