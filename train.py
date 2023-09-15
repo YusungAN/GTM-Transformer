@@ -37,9 +37,10 @@ def run(args):
     # print(fab_dict)
     # Load Google trends
     train_df.info()
+    train_df = train_df.sample(frac=1)
     print(train_df['keyword'].head(5))
-    train_loader = ZeroShotDataset(train_df[:20000], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
-    test_loader = ZeroShotDataset(train_df[20000:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    train_loader = ZeroShotDataset(train_df[:100], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    test_loader = ZeroShotDataset(train_df[100:150], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
 
     # Create model
     if args.model_type == 'FCN':
