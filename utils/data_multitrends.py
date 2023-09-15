@@ -16,7 +16,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 class ZeroShotDataset():
     def __init__(self, data_df, img_root, gtrends, trend_len, reviews):
-        self.data_df = data_df.sample(frac=1)
+        self.data_df = data_df
         self.gtrends = gtrends
         self.trend_len = trend_len
         self.reviews = reviews
