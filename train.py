@@ -10,6 +10,7 @@ from datetime import datetime
 from models.GTM import GTM
 from models.FCN import FCN
 from utils.data_multitrends import ZeroShotDataset
+import pickle
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
@@ -41,7 +42,11 @@ def run(args):
     print(train_df['keyword'].head(5))
     train_loader = ZeroShotDataset(train_df[:20000], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
     test_loader = ZeroShotDataset(train_df[20000:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
-
+    with open("train_loader.pickle","wb") as fw:
+        pickle.dump(train_loader, fw)
+    with open("test_loader.pickle","wb") as fw:
+        pickle.dump(test_loader, fw)
+    
     # Create model
     if args.model_type == 'FCN':
         model = FCN(
