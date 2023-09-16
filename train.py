@@ -91,14 +91,13 @@ def run(args):
         save_top_k=1
     )
 
-    wandb.init(entity=args.wandb_entity, project=args.wandb_proj, name=args.wandb_run)
-    wandb_logger = pl_loggers.WandbLogger()
-    wandb_logger.watch(model)
+    # wandb.init(entity=args.wandb_entity, project=args.wandb_proj, name=args.wandb_run)
+    # wandb_logger = pl_loggers.WandbLogger()
+    # wandb_logger.watch(model)
 
     # If you wish to use Tensorboard you can change the logger to:
     # tb_logger = pl_loggers.TensorBoardLogger(args.log_dir+'/', name=model_savename)
-    trainer = pl.Trainer(accelerator="auto", max_epochs=args.epochs, check_val_every_n_epoch=5,
-                         logger=wandb_logger, callbacks=[checkpoint_callback])
+    trainer = pl.Trainer(accelerator="auto", max_epochs=args.epochs, check_val_every_n_epoch=5, callbacks=[checkpoint_callback])
 
     # Fit model
     trainer.fit(model, train_dataloaders=train_loader, val_dataloaders=test_loader)
