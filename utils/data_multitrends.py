@@ -49,7 +49,7 @@ class ZeroShotDataset():
             # col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
             # fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
             item_cat = data[data['keyword'] == keyword]['cat2'].values[0]
-
+            print(item_cat.replace('/', ''))
             cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat.replace('/', '')].values[0][1:1+self.trend_len]
             brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
             cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
