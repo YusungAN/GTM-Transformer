@@ -48,7 +48,7 @@ def run(args):
     # gtrends = pd.read_csv(Path(args.data_folder + 'gtrends.csv'), index_col=[0], parse_dates=True)
     test_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv'))
     chosen_cat = ['식품']#['패션의류', '패션잡화', '화장품/미용', '가구/인테리어', '식품', '생활/건강']
-    train_df = train_df[train_df.cat1.isin(chosen_cat)]
+    test_df = test_df[test_df.cat1.isin(chosen_cat)]
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
     test_df = test_df[test_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())].sample(frac=1)
     reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
