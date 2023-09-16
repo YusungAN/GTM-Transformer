@@ -48,7 +48,8 @@ def run(args):
     # gtrends = pd.read_csv(Path(args.data_folder + 'gtrends.csv'), index_col=[0], parse_dates=True)
     test_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv')).sample(frac=1)[24017:]
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
-    test_loader = ZeroShotDataset(test_df, Path(args.data_folder + '/images'), gtrends, args.trend_len).get_loader(batch_size=1, train=False)
+    reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
+    test_loader = ZeroShotDataset(test_df, Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=1, train=False)
 
 
     model_savename = f'{args.wandb_run}_{args.output_dim}'
