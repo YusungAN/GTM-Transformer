@@ -46,10 +46,13 @@ def run(args):
 
     # Load Google trends
     # gtrends = pd.read_csv(Path(args.data_folder + 'gtrends.csv'), index_col=[0], parse_dates=True)
-    test_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv')).sample(frac=1)[24017:]
+    test_df = pd.read_csv(Path(args.data_folder + 'itemscout_item_word.csv'))
+    chosen_cat = ['식품']#['패션의류', '패션잡화', '화장품/미용', '가구/인테리어', '식품', '생활/건강']
+    train_df = train_df[train_df.cat1.isin(chosen_cat)]
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
+    test_df = test_df[test_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())].sample(frac=1)
     reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
-    test_loader = ZeroShotDataset(test_df, Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=1, train=False)
+    test_loader = ZeroShotDataset(test_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=1, train=False)
 
 
     model_savename = f'{args.wandb_run}_{args.output_dim}'
