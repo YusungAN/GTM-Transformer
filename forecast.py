@@ -114,7 +114,7 @@ def run(args):
     with open("gt.pickle","wb") as fw:
         pickle.dump(gt, fw)
     with open("forecasts.pickle","wb") as fw:
-        pickle.dump(forecasts, fw)'
+        pickle.dump(forecasts, fw)
     with open("test_data.pickle","wb") as fw:
         pickle.dump(test_df[24017:], fw)
 
