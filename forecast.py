@@ -111,12 +111,12 @@ def run(args):
     attns = np.stack(attns)
     forecasts = np.array(forecasts)
     gt = np.array(gt)
-    with open("gt.pickle","wb") as fw:
-        pickle.dump(gt, fw)
-    with open("forecasts.pickle","wb") as fw:
-        pickle.dump(forecasts, fw)
-    with open("test_data.pickle","wb") as fw:
-        pickle.dump(test_df[24017:], fw)
+    # with open("gt.pickle","wb") as fw:
+    #     pickle.dump(gt, fw)
+    # with open("forecasts.pickle","wb") as fw:
+    #     pickle.dump(forecasts, fw)
+    # with open("test_data.pickle","wb") as fw:
+    #     pickle.dump(test_df[24017:], fw)
 
     # rescale_vals = np.load(args.data_folder + 'stfore_sales_norm_scalar.npy')
     rescaled_forecasts = forecasts * 100
@@ -124,7 +124,7 @@ def run(args):
     print_error_metrics(gt, forecasts, rescaled_gt, rescaled_forecasts)
 
     
-    torch.save({'results': forecasts*100, 'gts': gt*100, 'codes': item_codes.tolist()}, Path('GTM-Transformer/results/' + model_savename+'.pth'))
+    torch.save({'results': forecasts*100, 'gts': gt*100, 'codes': test_df[24017:]['keyword'].values.tolist()}, Path('GTM-Transformer/results/' + model_savename+'.pth'))
 
 
 if __name__ == '__main__':
