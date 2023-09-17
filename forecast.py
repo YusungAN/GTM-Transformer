@@ -11,6 +11,7 @@ from pathlib import Path
 from sklearn.metrics import mean_absolute_error
 from sentence_transformers import SentenceTransformer
 from pathlib import Path
+import pickle
 
 
 def cal_error_metrics(gt, forecasts):
@@ -53,7 +54,7 @@ def run(args):
     test_df = test_df[test_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())].sample(frac=1)
     reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
     test_loader = ZeroShotDataset(test_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=1, train=False)
-
+    
 
     model_savename = f'{args.wandb_run}_{args.output_dim}'
     
@@ -110,7 +111,13 @@ def run(args):
     attns = np.stack(attns)
     forecasts = np.array(forecasts)
     gt = np.array(gt)
-    
+    with open("gt.pickle","wb") as fw:
+        pickle.dump(gt, fw)
+    with open("forecasts.pickle","wb") as fw:
+        pickle.dump(forecasts, fw)'
+    with open("test_data.pickle","wb") as fw:
+        pickle.dump(test_df[24017:], fw)
+
     # rescale_vals = np.load(args.data_folder + 'stfore_sales_norm_scalar.npy')
     rescaled_forecasts = forecasts * 100
     rescaled_gt = gt * 100
