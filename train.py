@@ -40,8 +40,8 @@ def run(args):
     train_df.info()
     train_df = train_df.sample(frac=1)
     print(train_df['keyword'].head(5))
-    train_loader = ZeroShotDataset(train_df[:24017], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
-    test_loader = ZeroShotDataset(train_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    train_loader = ZeroShotDataset(train_df[:512], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    test_loader = ZeroShotDataset(train_df[512:768], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
     with open("train_loader.pickle","wb") as fw:
         pickle.dump(train_loader, fw)
     with open("test_loader.pickle","wb") as fw:
