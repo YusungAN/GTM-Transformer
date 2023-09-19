@@ -310,10 +310,21 @@ class GTM(pl.LightningModule):
 
         return [optimizer]
 
+    def pearson_corr(gt, rescaled_forecasts):
+        def temp(a, b):
+            return np.dot((a - np.mean(a)), (b - np.mean(b))) / ((np.linalg.norm(a - np.mean(a))) * (np.linalg.norm(b - np.mean(b))))
+        corr = np.array([])
+        for i in range(len(gt)):
+            corr = np.append(corr, temp(gt[i], rescaled_forecasts[i]))
+
+        return torch.Tensor(corr)
+        
+        
+
     def training_step(self, train_batch, batch_idx):
         item_sales, text, gtrends = train_batch
         forecasted_sales, _ = self.forward(text, gtrends)
-        loss = F.mse_loss(item_sales, forecasted_sales.squeeze())
+        loss = F.mse_loss(item_sales, forecasted_sales.squeeze()) + 100*(1-pearson_corr()
         self.log('train_loss', loss)
 
         return loss
