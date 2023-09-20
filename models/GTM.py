@@ -318,9 +318,10 @@ class GTM(pl.LightningModule):
             cov = torch.sum(vx * vy)
             corr = cov / (torch.sqrt(torch.sum(vx ** 2)) * torch.sqrt(torch.sum(vy ** 2)) + 1e-12)
             return corr
+        
         corr = []
         for i in range(len(gt)):
-            corr = corr.append(temp(gt[i], rescaled_forecasts[i]))
+            corr.append(temp(gt[i], rescaled_forecasts[i]))
 
         return torch.tensor(corr)
         
