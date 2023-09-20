@@ -7,7 +7,7 @@ from transformers import pipeline
 from torchvision import models
 from fairseq.optim.adafactor import Adafactor
 from sentence_transformers import SentenceTransformer
-import numpt as np
+import numpy as np
 
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model, dropout=0.1, max_len=52):
