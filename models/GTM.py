@@ -313,11 +313,11 @@ class GTM(pl.LightningModule):
     def pearson_corr(self, gt, rescaled_forecasts):
         def temp(a, b):
             return np.dot((a - np.mean(a)), (b - np.mean(b))) / ((np.linalg.norm(a - np.mean(a))) * (np.linalg.norm(b - np.mean(b))))
-        corr = np.array([])
+        corr = []
         for i in range(len(gt)):
-            corr = np.append(corr, temp(gt[i], rescaled_forecasts[i]))
+            corr = corr.append(temp(gt[i], rescaled_forecasts[i]))
 
-        return torch.Tensor(corr)
+        return torch.cat(corr)
         
         
 
