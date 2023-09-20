@@ -312,10 +312,12 @@ class GTM(pl.LightningModule):
         return [optimizer]
 
     def pearson_corr(self, gt, rescaled_forecasts):
-        def temp(a, b):
-            a = a.numpy()
-            b = b.numpy()
-            return np.dot((a - np.mean(a)), (b - np.mean(b))) / ((np.linalg.norm(a - np.mean(a))) * (np.linalg.norm(b - np.mean(b))))
+        def temp(x, y):
+            vx = x - torch.mean(x)
+            vy = y - torch.mean(y)
+            cov = torch.sum(vx * vy)
+            corr = cov / (torch.sqrt(torch.sum(vx ** 2)) * torch.sqrt(torch.sum(vy ** 2)) + 1e-12)
+            return corr
         corr = []
         for i in range(len(gt)):
             corr = corr.append(temp(gt[i], rescaled_forecasts[i]))
