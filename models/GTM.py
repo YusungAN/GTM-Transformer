@@ -7,6 +7,7 @@ from transformers import pipeline
 from torchvision import models
 from fairseq.optim.adafactor import Adafactor
 from sentence_transformers import SentenceTransformer
+import numpt as np
 
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model, dropout=0.1, max_len=52):
@@ -312,12 +313,14 @@ class GTM(pl.LightningModule):
 
     def pearson_corr(self, gt, rescaled_forecasts):
         def temp(a, b):
+            a = a.numpy()
+            b = b.numpy()
             return np.dot((a - np.mean(a)), (b - np.mean(b))) / ((np.linalg.norm(a - np.mean(a))) * (np.linalg.norm(b - np.mean(b))))
         corr = []
         for i in range(len(gt)):
             corr = corr.append(temp(gt[i], rescaled_forecasts[i]))
 
-        return torch.cat(corr)
+        return torch.tensor(corr)
         
         
 
