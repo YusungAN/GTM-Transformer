@@ -310,7 +310,7 @@ class GTM(pl.LightningModule):
 
         return [optimizer]
 
-    def pearson_corr(gt, rescaled_forecasts):
+    def pearson_corr(self, gt, rescaled_forecasts):
         def temp(a, b):
             return np.dot((a - np.mean(a)), (b - np.mean(b))) / ((np.linalg.norm(a - np.mean(a))) * (np.linalg.norm(b - np.mean(b))))
         corr = np.array([])
@@ -324,8 +324,6 @@ class GTM(pl.LightningModule):
     def training_step(self, train_batch, batch_idx):
         item_sales, text, gtrends = train_batch
         forecasted_sales, _ = self.forward(text, gtrends)
-        print('asdfasdf', forecasted_sales.squeeze(), forecasted_sales.squeeze().shape)
-        print('asdfasdf', item_sales, item_sales.shape)
         loss = F.mse_loss(item_sales, forecasted_sales.squeeze()) + 100*(1-self.pearson_corr(item_sales, forecasted_sales.squeeze()))
         self.log('train_loss', loss)
 
