@@ -325,8 +325,8 @@ class GTM(pl.LightningModule):
         item_sales, text, gtrends = train_batch
         forecasted_sales, _ = self.forward(text, gtrends)
         print('asdfasdf', forecasted_sales.shape, forecasted_sales.squeeze())
-        print('asdfasdf', forecasted_sales.squeeze().shape)
-        loss = F.mse_loss(item_sales, forecasted_sales.squeeze()) + 100*(1-self.pearson_corr(item_sales, forecasted_sales.squeeze()))
+        print('asdfasdf', forecasted_sales[0].shape)
+        loss = F.mse_loss(item_sales, forecasted_sales.squeeze()) + 100*(1-self.pearson_corr(item_sales, forecasted_sales[0]))
         self.log('train_loss', loss)
 
         return loss
