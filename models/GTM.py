@@ -323,7 +323,7 @@ class GTM(pl.LightningModule):
         for i in range(len(gt)):
             corr.append(temp(gt[i], rescaled_forecasts[i]))
 
-        return torch.tensor(corr).to('cuda:' + str(self.gpu_num))
+        return sum(corr)/len(corr)
         
         
 
