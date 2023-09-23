@@ -281,7 +281,7 @@ class GTM(pl.LightningModule):
     def forward(self, text, gtrends):
         # Encode features and get inputs
         # img_encoding = self.image_encoder(images)
-        text_encoding = np.zeros(self.embedding_dim) # self.text_encoder(text)
+        text_encoding = torch.Tensor(np.zeros(self.embedding_dim).reshape(1, self.embedding_dim)).to('cuda:' + str(self.gpu_num)) # self.text_encoder(text)
         gtrend_encoding = self.gtrend_encoder(gtrends)
 
         # Fuse static features together
