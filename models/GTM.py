@@ -299,6 +299,7 @@ class GTM(pl.LightningModule):
             forecast = self.decoder_fc(decoder_out)
         else:
             # Decode (generatively/non-autoregressively)
+            print('sadfasdf', static_feature_fusion.shape)
             tgt = static_feature_fusion.unsqueeze(0)
             memory = gtrend_encoding
             decoder_out, attn_weights = self.decoder(tgt, memory)
