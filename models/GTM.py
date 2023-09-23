@@ -281,7 +281,7 @@ class GTM(pl.LightningModule):
     def forward(self, text, gtrends):
         # Encode features and get inputs
         # img_encoding = self.image_encoder(images)
-        text_encoding = self.text_encoder(np.zeros(768)) # self.text_encoder(text)
+        text_encoding = self.text_encoder(np.zeros(768).reshape(1, 768)) # self.text_encoder(text)
         gtrend_encoding = self.gtrend_encoder(gtrends)
 
         # Fuse static features together
