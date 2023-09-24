@@ -91,22 +91,22 @@ class ZeroShotDataset():
         model = SentenceTransformer('beomi/KcELECTRA-base-v2022')
         
         res = 0
-        # words = []
-        # for k in range(len(data['keyword'].values)):
-        #     class_doc = reviews[reviews['keyword'] == k]
-        #     if len(class_doc.index) != 0:
-        #         df2 = pd.DataFrame(class_doc.values, columns=['text'])
+        words = []
+        for k in range(len(data['keyword'].values)):
+            class_doc = reviews[reviews['keyword'] == k]
+            if len(class_doc.index) != 0:
+                df2 = pd.DataFrame(class_doc.values, columns=['text'])
             
-        #         tfidf_vector = TfidfVectorizer()
-        #         tfidf_matrix = tfidf_vector.fit_transform(df2['text']).toarray()
-        #         tfidf_feature = tfidf_vector.get_feature_names_out()
-        #         result = pd.DataFrame(tfidf_matrix, columns=tfidf_feature)
-        #         tmp = result.iloc[k]
-        #         tmp.sort_values(ascending=False, inplace=True)
-        #         words.append(' '.join(list(tmp[:5].index)+[k, data[data['keyword'] == k]['cat2']]))
-        #     else:
-        #         words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
-        # word_embeddings = model.encode(words)
+                tfidf_vector = TfidfVectorizer()
+                tfidf_matrix = tfidf_vector.fit_transform(df2['text']).toarray()
+                tfidf_feature = tfidf_vector.get_feature_names_out()
+                result = pd.DataFrame(tfidf_matrix, columns=tfidf_feature)
+                tmp = result.iloc[k]
+                tmp.sort_values(ascending=False, inplace=True)
+                words.append(' '.join(list(tmp[:5].index)+[k, data[data['keyword'] == k]['cat2']]))
+            else:
+                words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
+        word_embeddings = model.encode(words)
         word_embeddings = np.zeros(len(data['keyword'].values)*768).reshape(len(data['keyword'].values), 768)
         text = torch.FloatTensor(word_embeddings)
         # images = torch.stack(image_features)
