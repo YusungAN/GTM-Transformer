@@ -107,7 +107,7 @@ class ZeroShotDataset():
             #     words.append(' '.join(list(tmp[:5].index)+[k, data[data['keyword'] == k]['cat2']]))
             # else:
             #     words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
-        word_embeddings = model.encode(words)
+        word_embeddings = model.encode(np.array(words))
         # word_embeddings = np.zeros(len(data['keyword'].values)*768).reshape(len(data['keyword'].values), 768)
         text = torch.FloatTensor(word_embeddings)
         # images = torch.stack(image_features)
