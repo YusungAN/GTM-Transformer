@@ -93,7 +93,7 @@ class ZeroShotDataset():
         res = 0
         words = []
         for k in range(len(data['keyword'].values)):
-            text = reviews[reviews['keyword'] == k]['summ'].values
+            # text = reviews[reviews['keyword'] == k]['summ'].values
             # if len(text) == 0:
             #     words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
             # else:
