@@ -41,9 +41,10 @@ def run(args):
     chosen_word = reviews_df.groupby('keyword').count().index.tolist()
     train_df = train_df[train_df.cat1.isin(chosen_word)]
     train_df = train_df.sample(frac=1)
-    print(train_df['keyword'].head(5))
-    train_loader = ZeroShotDataset(train_df[:-3200], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
-    test_loader = ZeroShotDataset(train_df[-3200:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    cut = len(train_df.index)
+    print('len', len(train_df.index), 'cut', cut)
+    train_loader = ZeroShotDataset(train_df[:cut-3200], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    test_loader = ZeroShotDataset(train_df[cut-3200:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
     # with open("train_loader.pickle","rb") as fw:
     #     train_loader = pickle.load(fw)
     # with open("test_loader.pickle","rb") as fw:
