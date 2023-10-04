@@ -26,7 +26,7 @@ def run(args):
     train_df = train_df[train_df.cat1.isin(chosen_cat)]
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
     train_df = train_df[train_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())]
-    reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
+    reviews_df = pd.read_csv(Path(args.data_folder + 'reviews_summ_total.csv'))
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
     # Load category and color encodings
@@ -38,14 +38,16 @@ def run(args):
     # print(fab_dict)
     # Load Google trends
     train_df.info()
+    chosen_word = reviews_df.groupby('keyword').count().index.tolist()
+    train_df = train_df[train_df.cat1.isin(chosen_word)]
     train_df = train_df.sample(frac=1)
     print(train_df['keyword'].head(5))
-    # train_loader = ZeroShotDataset(train_df[:24017], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
-    # test_loader = ZeroShotDataset(train_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
-    with open("train_loader.pickle","rb") as fw:
-        train_loader = pickle.load(fw)
-    with open("test_loader.pickle","rb") as fw:
-        test_loader = pickle.load(fw)
+    train_loader = ZeroShotDataset(train_df[:-3200], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    test_loader = ZeroShotDataset(train_df[-3200:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    # with open("train_loader.pickle","rb") as fw:
+    #     train_loader = pickle.load(fw)
+    # with open("test_loader.pickle","rb") as fw:
+    #     test_loader = pickle.load(fw)
     
     # Create model
     if args.model_type == 'FCN':
