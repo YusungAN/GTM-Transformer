@@ -93,7 +93,11 @@ class ZeroShotDataset():
         res = 0
         words = []
         for k in range(len(data['keyword'].values)):
-            words.append(reviews[reviews['keyword'] == k]['summ'])
+            text = reviews[reviews['keyword'] == k]['summ']
+            if len(text.strip()) == 0:
+                words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
+            else:
+                words.append(reviews[reviews['keyword'] == k]['summ'])
             # class_doc = reviews[reviews['keyword'] == k]
             # if len(class_doc.index) != 0:
             #     df2 = pd.DataFrame(class_doc.values, columns=['text'])
@@ -107,7 +111,7 @@ class ZeroShotDataset():
             #     words.append(' '.join(list(tmp[:5].index)+[k, data[data['keyword'] == k]['cat2']]))
             # else:
             #     words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
-        word_embeddings = model.encode(np.array(words))
+        word_embeddings = model.encode(words)
         # word_embeddings = np.zeros(len(data['keyword'].values)*768).reshape(len(data['keyword'].values), 768)
         text = torch.FloatTensor(word_embeddings)
         # images = torch.stack(image_features)
