@@ -25,9 +25,8 @@ def run(args):
     chosen_cat = ['식품']#['패션의류', '패션잡화', '화장품/미용', '가구/인테리어', '식품', '생활/건강']
     train_df = train_df[train_df.cat1.isin(chosen_cat)]
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
+    train_df = train_df[train_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())]
     reviews_df = pd.read_csv(Path(args.data_folder + 'reviews_summ_total.csv'))
-    train_df = train_df[train_df.keyword.isin(reviews_df.groupby('keyword').count().index.tolist())]
-
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
     # Load category and color encodings
@@ -40,12 +39,12 @@ def run(args):
     # Load Google trends
     train_df.info()
     chosen_word = reviews_df.groupby('keyword').count().index.tolist()
-    train_df = train_df[train_df.cat1.isin(chosen_word)]
+    train_df = train_df[train_df.keyword.isin(chosen_word)]
     train_df = train_df.sample(frac=1)
     cut = len(train_df.index)
     print('len', len(train_df.index), 'cut', cut)
-    train_loader = ZeroShotDataset(train_df[:cut-3200], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
-    test_loader = ZeroShotDataset(train_df[cut-3200:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    train_loader = ZeroShotDataset(train_df[:cut-1280], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
+    test_loader = ZeroShotDataset(train_df[cut-1280:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
     # with open("train_loader.pickle","rb") as fw:
     #     train_loader = pickle.load(fw)
     # with open("test_loader.pickle","rb") as fw:
