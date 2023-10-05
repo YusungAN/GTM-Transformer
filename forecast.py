@@ -122,7 +122,7 @@ def run(args):
     with open("forecasts3.pickle","wb") as fw:
         pickle.dump(forecasts, fw)
     with open("test_data3.pickle","wb") as fw:
-        pickle.dump(test_df[24017:], fw)
+        pickle.dump(test_df[cut-1280:], fw)
 
     # rescale_vals = np.load(args.data_folder + 'stfore_sales_norm_scalar.npy')
     rescaled_forecasts = forecasts * 100
