@@ -26,6 +26,7 @@ def run(args):
     train_df = train_df[train_df.cat1.isin(chosen_cat)]
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
     train_df = train_df[train_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())]
+    # reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
     reviews_df = pd.read_csv(Path(args.data_folder + 'reviews_summ_total.csv'))
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
