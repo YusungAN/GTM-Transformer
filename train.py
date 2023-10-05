@@ -44,7 +44,7 @@ def run(args):
     train_df = train_df.sample(frac=1)
     cut = len(train_df.index)
     print('len', len(train_df.index), 'cut', cut)
-    reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
+    # reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
     train_loader = ZeroShotDataset(train_df[:cut-1280], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
     test_loader = ZeroShotDataset(train_df[cut-1280:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df).get_loader(batch_size=args.batch_size, train=True)
     # with open("train_loader.pickle","rb") as fw:
