@@ -27,7 +27,7 @@ def run(args):
     gtrends = pd.read_csv(Path(args.data_folder + 'item_word_trend.csv'))
     train_df = train_df[train_df.keyword.isin(gtrends.groupby('keyword').count().index.tolist())]
     # reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
-    reviews_df = pd.read_csv(Path(args.data_folder + 'reviews_summ_total.csv'))
+    reviews_df = pd.read_csv(Path(args.data_folder + 'reviews_summ_total.csv'))[['keyword', 'summ']]
     # test_df = pd.read_csv(Path(args.data_folder + 'test.csv'), parse_dates=['release_date'])
 
     # Load category and color encodings
