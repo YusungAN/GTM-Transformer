@@ -41,7 +41,7 @@ def run(args):
     train_df.info()
     # chosen_word = reviews_df.groupby('keyword').count().index.tolist()
     # train_df = train_df[train_df.keyword.isin(chosen_word)]
-    # train_df = train_df.sample(frac=1)
+    train_df = train_df.sample(frac=1)
     # cut = len(train_df.index)
     # print('len', len(train_df.index), 'cut', cut)
     # reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
