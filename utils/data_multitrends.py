@@ -58,8 +58,8 @@ class ZeroShotDataset():
                     cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
                     brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
                     
-                    cat_gtrend = np.concatenate((cat_gtrend[delta:], cat_gtrend[:delta])))
-                    brand_gtrend = np.concatenate((brand_gtrend[delta:], brand_gtrend[:delta])))
+                    cat_gtrend = np.concatenate((cat_gtrend[delta:], cat_gtrend[:delta]))
+                    brand_gtrend = np.concatenate((brand_gtrend[delta:], brand_gtrend[:delta]))
                     
                     
                     multitrends = np.vstack([cat_gtrend, brand_gtrend])
