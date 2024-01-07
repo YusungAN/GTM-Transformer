@@ -15,7 +15,7 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 class ZeroShotDataset():
-    def __init__(self, data_df, img_root, gtrends, trend_len, reviews):
+    def __init__(self, data_df, img_root, gtrends, trend_len, reviews, do_data_aug):
         self.data_df = data_df
         self.gtrends = gtrends
         self.trend_len = trend_len
@@ -48,18 +48,42 @@ class ZeroShotDataset():
             # cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1,1)).flatten()
             # col_gtrend = MinMaxScaler().fit_transform(col_gtrend.reshape(-1,1)).flatten()
             # fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
-            item_cat = data[data['keyword'] == keyword]['cat2'].values[0]
-            cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat.replace('/', '')].values[0][1:1+self.trend_len]
-            brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
-            cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
-            brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
-            multitrends = np.vstack([cat_gtrend, brand_gtrend])
-            # Read images
-            # img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
 
-            # Append them to the lists
-            gtrends.append(multitrends)
-            # image_features.append(img_transforms(img))
+            # data augmentation test
+            if do_data_aug:
+                for delta in [0, 9, 22, 35]
+                    item_cat = data[data['keyword'] == keyword]['cat2'].values[0]
+                    cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat.replace('/', '')].values[0][1:1+self.trend_len]
+                    brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
+                    cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
+                    brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
+                    
+                    cat_gtrend = np.concatenate((cat_gtrend[delta:], cat_gtrend[:delta])))
+                    brand_gtrend = np.concatenate((brand_gtrend[delta:], brand_gtrend[:delta])))
+                    
+                    
+                    multitrends = np.vstack([cat_gtrend, brand_gtrend])
+                    # Read images
+                    # img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
+        
+                    # Append them to the lists
+                    gtrends.append(multitrends)
+                    # image_features.append(img_transforms(img))
+            else:
+                tem_cat = data[data['keyword'] == keyword]['cat2'].values[0]
+                cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat.replace('/', '')].values[0][1:1+self.trend_len]
+                brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
+                cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
+                brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
+    
+                multitrends = np.vstack([cat_gtrend, brand_gtrend])
+                # Read images
+                # img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
+    
+                # Append them to the lists
+                gtrends.append(multitrends)
+                # image_features.append(img_transforms(img))
+            
 
         # Convert to numpy arrays
         gtrends = np.array(gtrends)
@@ -84,7 +108,11 @@ class ZeroShotDataset():
 
         item_sale_li = []
         def extract_target_data(x):
-            item_sale_li.append(self.gtrends[self.gtrends['keyword'] == x['keyword']].iloc[:, -52:].values[0])
+            if do_data_aug:
+                for _ in range(4):
+                    item_sale_li.append(self.gtrends[self.gtrends['keyword'] == x['keyword']].iloc[:, -52:].values[0])
+            else:
+                item_sale_li.append(self.gtrends[self.gtrends['keyword'] == x['keyword']].iloc[:, -52:].values[0])
         data.apply(extract_target_data, axis=1)
         item_sales = torch.FloatTensor(item_sale_li)
         gtrends = torch.FloatTensor(gtrends)
