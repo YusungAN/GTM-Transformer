@@ -71,7 +71,7 @@ class ZeroShotDataset():
                     gtrends.append(multitrends)
                     # image_features.append(img_transforms(img))
             else:
-                tem_cat = data[data['keyword'] == keyword]['cat2'].values[0]
+                item_cat = data[data['keyword'] == keyword]['cat2'].values[0]
                 cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat.replace('/', '')].values[0][1:1+self.trend_len]
                 brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
                 cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
