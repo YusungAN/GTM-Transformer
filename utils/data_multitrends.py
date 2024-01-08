@@ -21,6 +21,7 @@ class ZeroShotDataset():
         self.trend_len = trend_len
         self.reviews = reviews
         # self.img_root = img_root
+        self.do_data_aug = do_data_aug
 
     def __len__(self):
         return len(self.data_df)
@@ -50,7 +51,7 @@ class ZeroShotDataset():
             # fab_gtrend = MinMaxScaler().fit_transform(fab_gtrend.reshape(-1,1)).flatten()
 
             # data augmentation test
-            if do_data_aug:
+            if self.do_data_aug:
                 for delta in [0, 9, 22, 35]:
                     item_cat = data[data['keyword'] == keyword]['cat2'].values[0]
                     cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat.replace('/', '')].values[0][1:1+self.trend_len]
@@ -108,7 +109,7 @@ class ZeroShotDataset():
 
         item_sale_li = []
         def extract_target_data(x):
-            if do_data_aug:
+            if self.do_data_aug:
                 for _ in range(4):
                     item_sale_li.append(self.gtrends[self.gtrends['keyword'] == x['keyword']].iloc[:, -52:].values[0])
             else:
