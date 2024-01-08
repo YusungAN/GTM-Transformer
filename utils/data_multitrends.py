@@ -122,11 +122,19 @@ class ZeroShotDataset():
         res = 0
         words = []
         for k in range(len(data['keyword'].values)):
-            text = reviews[reviews['keyword'] == k]['summ'].values
-            if len(text) == 0 or text[0].strip() == '':
-                words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
+            if self.do_data_aug:
+                text = reviews[reviews['keyword'] == k]['summ'].values
+                for _ in range(4):
+                    if len(text) == 0 or text[0].strip() == '':
+                        words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
+                    else:
+                        words.append(text[0])
             else:
-                words.append(text[0])
+                text = reviews[reviews['keyword'] == k]['summ'].values
+                if len(text) == 0 or text[0].strip() == '':
+                    words.append([k, data[data['keyword'] == k]['cat2'], data[data['keyword'] == k]['cat3']])
+                else:
+                    words.append(text[0])
             # class_doc = reviews[reviews['keyword'] == k]
             # if len(class_doc.index) != 0:
             #     df2 = pd.DataFrame(class_doc.values, columns=['text'])
