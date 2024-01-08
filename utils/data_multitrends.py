@@ -110,8 +110,9 @@ class ZeroShotDataset():
         item_sale_li = []
         def extract_target_data(x):
             if self.do_data_aug:
-                for _ in range(4):
-                    item_sale_li.append(self.gtrends[self.gtrends['keyword'] == x['keyword']].iloc[:, -52:].values[0])
+                gt_tmp = self.gtrends[self.gtrends['keyword'] == x['keyword']].iloc[:, -52:].values[0]
+                for delta in [0, 9, 22, 35]:
+                    item_sale_li.append(np.concatenate((gt_tmp[delta:], gt_tmp[:delta])))
             else:
                 item_sale_li.append(self.gtrends[self.gtrends['keyword'] == x['keyword']].iloc[:, -52:].values[0])
         data.apply(extract_target_data, axis=1)
