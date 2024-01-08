@@ -51,7 +51,7 @@ class ZeroShotDataset():
 
             # data augmentation test
             if do_data_aug:
-                for delta in [0, 9, 22, 35]
+                for delta in [0, 9, 22, 35]:
                     item_cat = data[data['keyword'] == keyword]['cat2'].values[0]
                     cat_gtrend = self.gtrends.loc[self.gtrends['keyword'] == item_cat.replace('/', '')].values[0][1:1+self.trend_len]
                     brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
