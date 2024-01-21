@@ -127,7 +127,7 @@ if __name__ == '__main__':
     parser.add_argument('--use_img', type=int, default=0)
     parser.add_argument('--use_text', type=int, default=1)
     parser.add_argument('--trend_len', type=int, default=157)
-    parser.add_argument('--num_trends', type=int, default=2)
+    parser.add_argument('--num_trends', type=int, default=3)
     parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--embedding_dim', type=int, default=32)
     parser.add_argument('--hidden_dim', type=int, default=64)
