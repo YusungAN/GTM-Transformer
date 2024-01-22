@@ -9,7 +9,7 @@ from torchvision.transforms import Resize, ToTensor, Normalize, Compose
 from sklearn.preprocessing import MinMaxScaler
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
-
+from statsmodels.tsa.seasonal import STL
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -76,8 +76,9 @@ class ZeroShotDataset():
                 brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
                 cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
                 brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
-    
-                multitrends = np.vstack([cat_gtrend, brand_gtrend])
+                brand_decomposed = pd.Series(sd, index=pd.date_range(start="12-31-2018", end="1-2-2022", freq="W"), name="seasonal")
+                brand_decomposed_seasonal = brand_decomposed.seasonal.values
+                multitrends = np.vstack([cat_gtrend, brand_gtrend, brand_decomposed_seasonal])
                 # Read images
                 # img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
     
