@@ -77,7 +77,9 @@ class ZeroShotDataset():
                 cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
                 brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
                 brand_decomposed = pd.Series(brand_gtrend, index=pd.date_range(start="12-31-2018", end="1-2-2022", freq="W"), name="seasonal")
-                brand_decomposed_seasonal = brand_decomposed.seasonal.values
+                stl = STL(sd, seasonal=13, period=12)
+                res = stl.fit()
+                brand_decomposed_seasonal = res.seasonal.values
                 multitrends = np.vstack([cat_gtrend, brand_gtrend, brand_decomposed_seasonal])
                 # Read images
                 # img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
