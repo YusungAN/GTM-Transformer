@@ -45,16 +45,16 @@ def run(args):
     # cut = len(train_df.index)
     # print('len', len(train_df.index), 'cut', cut)
     # reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
-    train_loader = ZeroShotDataset(train_df[:24017], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df, False).get_loader(batch_size=args.batch_size, train=True)
-    test_loader = ZeroShotDataset(train_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df, False).get_loader(batch_size=args.batch_size, train=True)
-    with open("train_loaser.pk", "wb") as fw:
-        pickle.dump(train_loader, fw)
-    with open("test_loader.pk", "wb") as fw:
-        pickle.dump(test_loader, fw)
-    # with open("train_loader.pickle","rb") as fw:
-    #     train_loader = pickle.load(fw)
-    # with open("test_loader.pickle","rb") as fw:
-    #     test_loader = pickle.load(fw)
+    # train_loader = ZeroShotDataset(train_df[:24017], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df, False).get_loader(batch_size=args.batch_size, train=True)
+    # test_loader = ZeroShotDataset(train_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df, False).get_loader(batch_size=args.batch_size, train=True)
+    # with open("train_loaser.pk", "wb") as fw:
+    #     pickle.dump(train_loader, fw)
+    # with open("test_loader.pk", "wb") as fw:
+    #     pickle.dump(test_loader, fw)
+    with open("/kaggle/input/dataloader/train_loaser.pk","rb") as fw:
+        train_loader = pickle.load(fw)
+    with open("/kaggle/input/dataloader/test_loader.pk","rb") as fw:
+        test_loader = pickle.load(fw)
     
     # Create model
     if args.model_type == 'FCN':
