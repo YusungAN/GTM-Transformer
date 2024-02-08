@@ -87,6 +87,7 @@ class ZeroShotDataset():
                 period = pyd.autoperiod(brand_gtrend)
                 x_parallel = 0
                 max_corr = 0
+                X = np.arange(157)
                 for i in range(1, period+1):
                     Y = (np.sin((X+i)*2*np.pi/period)+1)/2
                     if pearson_corr(brand_gtrend, Y) > max_corr:
