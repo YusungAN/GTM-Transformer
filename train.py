@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 from models.GTM import GTM
 from models.FCN import FCN
-from utils.data_multitrends import ZeroShotDataset
+# from utils.data_multitrends import ZeroShotDataset
 import pickle
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
