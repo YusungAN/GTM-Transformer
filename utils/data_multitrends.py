@@ -10,7 +10,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from statsmodels.tsa.seasonal import STL
-import periodicity_detection as pyd
+# import periodicity_detection as pyd
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -84,7 +84,7 @@ class ZeroShotDataset():
                 # stl = STL(brand_decomposed, seasonal=13, period=12)
                 # res = stl.fit()
                 # brand_decomposed_seasonal = res.seasonal.values
-                period = pyd.autoperiod(brand_gtrend)
+                period = autoperiod(brand_gtrend) #pyd.autoperiod(brand_gtrend)
                 x_parallel = 0
                 max_corr = 0
                 X = np.arange(157)
