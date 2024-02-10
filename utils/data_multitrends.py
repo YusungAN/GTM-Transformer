@@ -10,7 +10,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sentence_transformers import SentenceTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from statsmodels.tsa.seasonal import STL
-# import periodicity_detection as pyd
+import periodicity_detection as pyd
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -80,22 +80,22 @@ class ZeroShotDataset():
                 brand_gtrend = self.gtrends.loc[self.gtrends['keyword'] == keyword].values[0][1:1+self.trend_len]
                 cat_gtrend = MinMaxScaler().fit_transform(cat_gtrend.reshape(-1, 1)).flatten()[:self.trend_len]
                 brand_gtrend = MinMaxScaler().fit_transform(brand_gtrend.reshape(-1, 1)).flatten()
-                brand_decomposed = pd.Series(brand_gtrend, index=pd.date_range(start="12-31-2018", end="1-2-2022", freq="W"), name="seasonal")
-                stl = STL(brand_decomposed, seasonal=13, period=12)
-                res = stl.fit()
-                brand_decomposed_trend = res.trend.values
-                # period = autoperiod(brand_gtrend) #pyd.autoperiod(brand_gtrend)
-                # x_parallel = 0
-                # max_corr = 0
-                # X = np.arange(157)
-                # for i in range(1, period+1):
-                #     Y = (np.sin((X+i)*2*np.pi/period)+1)/2
-                #     if pearson_corr(brand_gtrend, Y) > max_corr:
-                #         max_corr = pearson_corr(brand_gtrend, Y)
-                #         x_parallel = i
+                # brand_decomposed = pd.Series(brand_gtrend, index=pd.date_range(start="12-31-2018", end="1-2-2022", freq="W"), name="seasonal")
+                # stl = STL(brand_decomposed, seasonal=13, period=12)
+                # res = stl.fit()
+                # brand_decomposed_trend = res.trend.values
+                period = pyd.autoperiod(brand_gtrend)
+                x_parallel = 0
+                max_corr = 0
+                X = np.arange(157)
+                for i in range(1, period+1):
+                    Y = (np.sin((X+i)*2*np.pi/period)+1)/2
+                    if pearson_corr(brand_gtrend, Y) > max_corr:
+                        max_corr = pearson_corr(brand_gtrend, Y)
+                        x_parallel = i
                 
-                # period_feature = (np.sin((X+x_parallel)*2*np.pi/period)+1)/2
-                multitrends = np.vstack([cat_gtrend, brand_gtrend, brand_decomposed_trend])
+                period_feature = (np.sin((X+x_parallel)*2*np.pi/period)+1)/2
+                multitrends = np.vstack([cat_gtrend, brand_gtrend, period_feature])
                 # Read images
                 # img = Image.open(os.path.join(self.img_root, img_path)).convert('RGB')
     
