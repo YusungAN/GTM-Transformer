@@ -55,8 +55,8 @@ def run(args):
     # reviews_df = pd.read_csv(Path(args.data_folder + 'gtm_product_name.csv'))
     reviews_df = pd.read_csv(Path(args.data_folder + 'reviews_summ_total.csv'))
     chosen_word = reviews_df.groupby('keyword').count().index.tolist()
-    # test_df = test_df[test_df.keyword.isin(chosen_word)]
-    # test_df = test_df.sample(frac=1)
+    test_df = test_df[test_df.keyword.isin(chosen_word)]
+    test_df = test_df.sample(frac=1)
     cut = len(test_df.index)
     print('len', len(test_df.index), 'cut', cut)
     test_loader = ZeroShotDataset(test_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df, False).get_loader(batch_size=1, train=False)
