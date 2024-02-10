@@ -83,7 +83,7 @@ class ZeroShotDataset():
                 brand_decomposed = pd.Series(brand_gtrend, index=pd.date_range(start="12-31-2018", end="1-2-2022", freq="W"), name="seasonal")
                 stl = STL(brand_decomposed, seasonal=13, period=12)
                 res = stl.fit()
-                brand_decomposed_trend = res.trend.values
+                brand_decomposed_trend = res.seasonal.values
                 # period = autoperiod(brand_gtrend) #pyd.autoperiod(brand_gtrend)
                 # x_parallel = 0
                 # max_corr = 0
