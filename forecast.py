@@ -59,9 +59,9 @@ def run(args):
     test_df = test_df.sample(frac=1)
     cut = len(test_df.index)
     print('len', len(test_df.index), 'cut', cut)
-    test_loader = ZeroShotDataset(test_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df, False).get_loader(batch_size=1, train=False)
-    with open("forecast_test_loader.pk", "wb") as fw:
-        pickle.dump(test_loader, fw)    
+    # test_loader = ZeroShotDataset(test_df[24017:], Path(args.data_folder + '/images'), gtrends, args.trend_len, reviews_df, False).get_loader(batch_size=1, train=False)
+    with open("/kaggle/input/dataloader/forecast_test_loader.pk", "rb") as fw:
+        test_loader = pickle.load(fw)    
 
     model_savename = f'{args.wandb_run}_{args.output_dim}'
     
